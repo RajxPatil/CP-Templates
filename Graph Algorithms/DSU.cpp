@@ -4,10 +4,12 @@ using namespace std;
 struct DSU {
     vector<int> parent;
     vector<int> rank;
+    vector<int> size;
 
     DSU(int n) {
         parent.resize(n);
         rank.resize(n);
+        size.resize(n);
         for (int i = 0; i < n; i++) {
             make_set(i);
         }
@@ -16,6 +18,7 @@ struct DSU {
     void make_set(int v) {
         parent[v] = v;
         rank[v] = 0;
+        size[v] = 1;
     }
 
     int find_set(int v) {
@@ -31,9 +34,14 @@ struct DSU {
             if (rank[a] < rank[b])
                 swap(a, b);
             parent[b] = a;
+            size[a] += size[b];  
             if (rank[a] == rank[b])
                 ++rank[a];
         }
+    }
+
+    int component_size(int v) {
+        return size[find_set(v)];
     }
 };
 
